@@ -16,6 +16,7 @@ import Register from './Register';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import * as auth from "../utils/auth.js";
+import InfoTooltip from './InfoTooltip'
 
 
 function App() {
@@ -79,7 +80,7 @@ function App() {
  
 
 
-  function loginOut() {
+  function onSignOut() {
     localStorage.removeItem("token");
     setLoggedIn(false);
     setEmail("");
@@ -146,6 +147,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard(null);
+    setInfoTooltipPopupOpen(false);
 
   }
 
@@ -243,7 +245,7 @@ function App() {
       });
   }
 
-  function loginUser({ email, password }) {
+  function onLogin({ email, password }) {
     auth
       .authorization(email, password)
       .then((token) => {
@@ -258,7 +260,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
      
-        <Header />
+        <Header userEmail={email} deleteToken={onSignOut} />
    
       <Routes>
       <Route
@@ -276,7 +278,7 @@ function App() {
                   onInfoTooltipClick={handleInfoTooltipClick}
                 />}
           />
-        <Route path="/sign-in" element={<Login  onLogin={loginUser}  />}  />
+        <Route path="/sign-in" element={<Login  onLogin={onLogin}  />}  />
         <Route
               path="/"
               element={
@@ -298,6 +300,12 @@ function App() {
 
      
         <Footer />
+
+        <InfoTooltip
+            isOpen={isInfoTooltipPopupOpen}
+            onClose={closeAllPopups}
+            isRegister={isRegister}
+          />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}

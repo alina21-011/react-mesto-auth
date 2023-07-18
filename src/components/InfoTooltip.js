@@ -11,7 +11,7 @@ export default function InfoTooltip({ isOpen, onClose, isRegister }) {
   }
   
   return (
-    <section className={`popup ${isOpen && ("popup_opened")} popup_registration`} onMouseDown={handleClickClose}>
+    <section className={`popup ${isOpen && ("popup_opened")}`} onMouseDown={handleClickClose}>
       <div className="popup__container">
           <img className="popup__picture" src={isRegister.status ? successCheckin : errorCheckin} />
           <h3 className="popup__title">{isRegister.message}</h3>

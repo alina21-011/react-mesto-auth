@@ -47,5 +47,7 @@
 @import url(./blocks/check-in/__title/check-in__title.css);
 @import url(./blocks/check-in/__input/check-in__input.css);
 @import url(./blocks/check-in/__submit/check-in__submit.css);
+@import url(./blocks/check-in/__entry/check-in__entry.css);
 @import url(./blocks/header/__text/header__text.css);
 @import url(./blocks/header/__info/header__info.css);
+@import url(./blocks/header/sign__out/header__signout.css);

@@ -7,6 +7,7 @@
   padding-top: 34px;
   max-width: 430px;
   box-sizing: border-box;
+  text-align: center;
 }
 
 @media (max-width: 544px) {
