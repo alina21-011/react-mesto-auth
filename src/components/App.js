@@ -11,7 +11,7 @@ import api from "../utils/Api";
 import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
 import AddPlacePopup from './AddPlacePopup'
-import {  Routes, Route, Navigate, useNavigate  } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import Register from './Register';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
@@ -37,20 +37,15 @@ function App() {
 
 
   React.useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) setToken(jwt);
-    api.getCards()
-      .then((card) => {
-        setCards(card);
-      })
-      .catch((err) => {
-        console.log(`Ошибка ${err}`);
-      });
-  }, []);
-
-  React.useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) setToken(jwt);
+    if (isLoggedIn) {
+      api
+        .getCards()
+        .then((card) => {
+          setCards(card);
+        })
+        .catch((err) => {
+          console.log(`Ошибка ${err}`);
+        });
     api
       .getUserData()
       .then((data) => {
@@ -59,25 +54,27 @@ function App() {
       .catch((err) => {
         console.log(`Ошибка ${err}`);
       });
-  }, []);
+    }
+  }, [isLoggedIn]);
 
-  
+
+
 
 
   React.useEffect(() => {
     function closeByEscape(evt) {
-      if(evt.key === 'Escape') {
+      if (evt.key === 'Escape') {
         closeAllPopups();
       }
     }
-    if(isOpen) { 
+    if (isOpen) {
       document.addEventListener('keydown', closeByEscape);
       return () => {
         document.removeEventListener('keydown', closeByEscape);
       }
     }
-  }, [isOpen]) 
- 
+  }, [isOpen])
+
 
 
   function onSignOut() {
@@ -87,7 +84,7 @@ function App() {
     navigate("/sign-in", { replace: true });
   }
 
- 
+
 
   const handleTokenCheck = () => {
     const jwt = localStorage.getItem("token");
@@ -104,7 +101,7 @@ function App() {
         });
     }
   };
- 
+
   React.useEffect(() => {
     handleTokenCheck();
   }, [token]);
@@ -257,13 +254,13 @@ function App() {
 
   return (
     <AppContext.Provider value={{ closeAllPopups }}>
-    <CurrentUserContext.Provider value={currentUser}>
-    <div className="page">
-     
-        <Header userEmail={email} deleteToken={onSignOut} />
-   
-      <Routes>
-      <Route
+      <CurrentUserContext.Provider value={currentUser}>
+        <div className="page">
+
+          <Header userEmail={email} deleteToken={onSignOut} />
+
+          <Routes>
+            <Route
               path="*"
               element={
                 isLoggedIn ? (
@@ -273,17 +270,17 @@ function App() {
                 )
               }
             />
-        <Route  path="/sign-up" element={ <Register
-                  onRegister={registerUser}
-                  onInfoTooltipClick={handleInfoTooltipClick}
-                />}
-          />
-        <Route path="/sign-in" element={<Login  onLogin={onLogin}  />}  />
-        <Route
+            <Route path="/sign-up" element={<Register
+              onRegister={registerUser}
+              onInfoTooltipClick={handleInfoTooltipClick}
+            />}
+            />
+            <Route path="/sign-in" element={<Login onLogin={onLogin} />} />
+            <Route
               path="/"
               element={
                 <ProtectedRoute
-               
+
                   element={Main}
                   loggedIn={isLoggedIn}
                   cards={cards}
@@ -296,47 +293,47 @@ function App() {
                 />
               }
             />
-      </Routes>
+          </Routes>
 
-     
-        <Footer />
 
-        <InfoTooltip
+          <Footer />
+
+          <InfoTooltip
             isOpen={isInfoTooltipPopupOpen}
             onClose={closeAllPopups}
             isRegister={isRegister}
           />
 
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onUpdateUser={handleUpdateUser}
-          buttonText={isLoading ? "Сохранение..." : "Сохранить"}
-        />
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onUpdateUser={handleUpdateUser}
+            buttonText={isLoading ? "Сохранение..." : "Сохранить"}
+          />
 
 
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onAddPlace={handleAddPlaceSubmit}
-          buttonText={isLoading ? "Сохранение..." : "Сохранить"}
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
+            onAddPlace={handleAddPlaceSubmit}
+            buttonText={isLoading ? "Сохранение..." : "Сохранить"}
 
 
-        />
+          />
 
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onUpdateAvatar={handleUpdateAvatar}
-          buttonText={isLoading ? "Сохранение..." : "Сохранить"}
-        />
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onUpdateAvatar={handleUpdateAvatar}
+            buttonText={isLoading ? "Сохранение..." : "Сохранить"}
+          />
 
-        <ImagePopup
-          popup={'photo'}
-          card={selectedCard}
-        />
+          <ImagePopup
+            popup={'photo'}
+            card={selectedCard}
+          />
         </div>
       </CurrentUserContext.Provider>
-      </AppContext.Provider>
- 
-    
+    </AppContext.Provider>
+
+
   );
 }
 
